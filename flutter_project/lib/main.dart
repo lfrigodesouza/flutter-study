@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/question.dart';
+
+import 'quiz.dart';
+import 'result.dart';
 
 //void main() {
 //  runApp(MyApp());
@@ -21,11 +23,30 @@ class _MyAppState extends State<MyApp> {
       _questionIndex++;
     });
     print(_questionIndex);
+    if (_questionIndex < _questions.length) {
+      print('We have more questions!');
+    } else {
+      print('No more questions!');
+    }
   }
 
-  var questions = [
-    'What\'s your favorite color?',
-    'What\'s your favorite animal?'
+  final _questions = const [
+    {
+      'questionText': 'What\'s your favorite color?',
+      'answers': ['Green', 'Blue', 'Yellow', 'Red']
+    },
+    {
+      'questionText': 'What\'s your favorite animal?',
+      'answers': ['Dog', 'Cat', 'Rabbit', 'Birds']
+    },
+    {
+      'questionText': 'What\'s your prefered vehicle?',
+      'answers': ['Car', 'Motorcicle', 'Bicicle', 'Boat']
+    },
+    {
+      'questionText': 'It\'s gonna rain today?',
+      'answers': ['Yes', 'No']
+    }
   ];
 
   Widget build(BuildContext context) {
@@ -35,23 +56,13 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Colors.green,
           title: Text('My First App'),
         ),
-        body: Column(children: [
-          Question(
-            questions[_questionIndex],
-          ),
-          RaisedButton(
-            child: Text('Answer 1'),
-            onPressed: _answerQuestion,
-          ),
-          RaisedButton(
-            child: Text('Answer 2'),
-            onPressed: _answerQuestion,
-          ),
-          RaisedButton(
-            child: Text('Answer 3'),
-            onPressed: _answerQuestion,
-          ),
-        ]),
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                answerQuestion: _answerQuestion,
+                questionIndex: _questionIndex,
+                questions: _questions,
+              )
+            : Result(),
       ),
     );
   }
