@@ -4,6 +4,7 @@ import 'package:expense_planner/widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
 
 import 'models/transaction.dart';
+import 'widgets/chart.dart';
 
 void main() => runApp(MyApp());
 
@@ -71,19 +72,29 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final List<Transaction> _userTransactions = [
-    Transaction(
-      id: 't1',
-      title: 'New Shoes',
-      ammount: 69.69,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Mercado',
-      ammount: 23.76,
-      date: DateTime.now(),
-    )
+//    Transaction(
+//      id: 't1',
+//      title: 'New Shoes',
+//      ammount: 69.69,
+//      date: DateTime.now().subtract(Duration(days: 1)),
+//    ),
+//    Transaction(
+//      id: 't2',
+//      title: 'Mercado',
+//      ammount: 23.76,
+//      date: DateTime.now(),
+//    )
   ];
+
+  List<Transaction> get _recentTransactions {
+    return _userTransactions.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,13 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blueGrey,
-                child: Text('CHART'),
-              ),
-            ),
+            Chart(_recentTransactions),
             TransactionList(_userTransactions)
           ],
         ),
