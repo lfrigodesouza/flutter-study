@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
+                button: TextStyle(color: Colors.white),
               ),
           primarySwatch: Colors.teal,
           accentColor: Colors.tealAccent,
@@ -49,15 +50,21 @@ class _MyHomePageState extends State<MyHomePage> {
   final titleController = TextEditingController();
   final ammountController = TextEditingController();
 
-  void _addNewTransaction(String title, double ammount) {
+  void _addNewTransaction(String title, double ammount, DateTime chosenDate) {
     final newTransaction = Transaction(
       ammount: ammount,
       title: title,
-      date: DateTime.now(),
+      date: chosenDate,
       id: DateTime.now().toString(),
     );
     setState(() {
       _userTransactions.add(newTransaction);
+    });
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransactions.removeWhere((element) => element.id == id);
     });
   }
 
@@ -113,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart(_recentTransactions),
-            TransactionList(_userTransactions)
+            TransactionList(_userTransactions, _deleteTransaction)
           ],
         ),
       ),

@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
+  final Function _deleteHandler;
 
-  TransactionList(this.transactions);
+  TransactionList(this.transactions, this._deleteHandler);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 440,
       child: transactions.isEmpty
           ? Column(
               children: <Widget>[
@@ -50,6 +51,15 @@ class TransactionList extends StatelessWidget {
                     ),
                     subtitle: Text(
                         DateFormat.yMMMd().format(transactions[index].date)),
+                    trailing: IconButton(
+                      onPressed: () {
+                        _deleteHandler(transactions[index].id);
+                      },
+                      icon: Icon(
+                        Icons.delete,
+                        color: Theme.of(context).errorColor,
+                      ),
+                    ),
                   ),
                 );
                 //  return Card(
