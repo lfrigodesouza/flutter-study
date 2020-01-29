@@ -11,10 +11,9 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 440,
-      child: transactions.isEmpty
-          ? Column(
+    return transactions.isEmpty
+        ? LayoutBuilder(builder: (ctx, constraints) {
+            return Column(
               children: <Widget>[
                 Text('No transactions added yet!'),
                 SizedBox(
@@ -23,90 +22,99 @@ class TransactionList extends StatelessWidget {
                 Container(
                   child: Image.asset('assets/images/waiting.png',
                       fit: BoxFit.cover),
-                  height: 200,
+                  height: constraints.maxHeight * 0.6,
                 )
               ],
-            )
-          : ListView.builder(
-              itemBuilder: (ctx, index) {
-                return Card(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 5,
-                    vertical: 8,
+            );
+          })
+        : ListView.builder(
+            itemBuilder: (ctx, index) {
+              return Card(
+                margin: EdgeInsets.symmetric(
+                  horizontal: 5,
+                  vertical: 8,
+                ),
+                elevation: 4,
+                child: ListTile(
+                  leading: CircleAvatar(
+                    radius: 30,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: FittedBox(
+                        child: Text('\$${transactions[index].ammount}'),
+                      ),
+                    ),
                   ),
-                  elevation: 4,
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 30,
-                      child: Padding(
-                        padding: const EdgeInsets.all(6),
-                        child: FittedBox(
-                          child: Text('\$${transactions[index].ammount}'),
+                  title: Text(
+                    transactions[index].title,
+                    style: Theme.of(context).textTheme.title,
+                  ),
+                  subtitle:
+                      Text(DateFormat.yMMMd().format(transactions[index].date)),
+                  trailing: MediaQuery.of(context).size.width > 460
+                      ? FlatButton.icon(
+                          textColor: Theme.of(context).errorColor,
+                          icon: Icon(Icons.delete),
+                          label: Text("Delete"),
+                          onPressed: () {
+                            _deleteHandler(transactions[index].id);
+                          },
+                        )
+                      : IconButton(
+                          onPressed: () {
+                            _deleteHandler(transactions[index].id);
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).errorColor,
+                          ),
                         ),
-                      ),
-                    ),
-                    title: Text(
-                      transactions[index].title,
-                      style: Theme.of(context).textTheme.title,
-                    ),
-                    subtitle: Text(
-                        DateFormat.yMMMd().format(transactions[index].date)),
-                    trailing: IconButton(
-                      onPressed: () {
-                        _deleteHandler(transactions[index].id);
-                      },
-                      icon: Icon(
-                        Icons.delete,
-                        color: Theme.of(context).errorColor,
-                      ),
-                    ),
-                  ),
-                );
-                //  return Card(
-                //    elevation: 5,
-                //    child: Row(
-                //      children: <Widget>[
-                //        Container(
-                //          margin: EdgeInsets.symmetric(
-                //            vertical: 10,
-                //            horizontal: 15,
-                //          ),
-                //          padding: EdgeInsets.all(10),
-                //          decoration: BoxDecoration(
-                //              border: Border.all(
-                //            color: Theme.of(context).accentColor,
-                //            width: 2,
-                //          )),
-                //          child: Text(
-                //            'R\$ ${transactions[index].ammount.toStringAsFixed(2)}',
-                //            style: TextStyle(
-                //                fontSize: 18,
-                //                fontWeight: FontWeight.bold,
-                //                color: Theme.of(context).primaryColorDark),
-                //            overflow: TextOverflow.ellipsis,
-                //          ),
-                //        ),
-                //        Column(
-                //          crossAxisAlignment: CrossAxisAlignment.start,
-                //          children: <Widget>[
-                //            Text(
-                //              transactions[index].title,
-                //              style: Theme.of(context).textTheme.title,
-                //            ),
-                //            Text(
-                //              DateFormat.yMMMd().format(transactions[index].date),
-                //              style: TextStyle(
-                //                color: Colors.grey,
-                //              ),
-                //            )
-                //          ],
-                //        )
-                //      ],
-                //    ),
-                //  );
-              },
-              itemCount: transactions.length,
-            ),
-    );
+                ),
+              );
+              //  return Card(
+              //    elevation: 5,
+              //    child: Row(
+              //      children: <Widget>[
+              //        Container(
+              //          margin: EdgeInsets.symmetric(
+              //            vertical: 10,
+              //            horizontal: 15,
+              //          ),
+              //          padding: EdgeInsets.all(10),
+              //          decoration: BoxDecoration(
+              //              border: Border.all(
+              //            color: Theme.of(context).accentColor,
+              //            width: 2,
+              //          )),
+              //          child: Text(
+              //            'R\$ ${transactions[index].ammount.toStringAsFixed(2)}',
+              //            style: TextStyle(
+              //                fontSize: 18,
+              //                fontWeight: FontWeight.bold,
+              //                color: Theme.of(context).primaryColorDark),
+              //            overflow: TextOverflow.ellipsis,
+              //          ),
+              //        ),
+              //        Column(
+              //          crossAxisAlignment: CrossAxisAlignment.start,
+              //          children: <Widget>[
+              //            Text(
+              //              transactions[index].title,
+              //              style: Theme.of(context).textTheme.title,
+              //            ),
+              //            Text(
+              //              DateFormat.yMMMd().format(transactions[index].date),
+              //              style: TextStyle(
+              //                color: Colors.grey,
+              //              ),
+              //            )
+              //          ],
+              //        )
+              //      ],
+              //    ),
+              //  );
+            },
+            itemCount: transactions.length,
+          );
   }
 }
