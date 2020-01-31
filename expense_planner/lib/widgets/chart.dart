@@ -6,7 +6,9 @@ import 'package:intl/intl.dart';
 
 class Chart extends StatelessWidget {
   final List<Transaction> recentTransactions;
-  Chart(this.recentTransactions);
+  Chart(this.recentTransactions) {
+    print('Constructor Chart');
+  }
 
   List<Map<String, Object>> get groupedTransactionValues {
     return List.generate(7, (index) {
@@ -21,9 +23,6 @@ class Chart extends StatelessWidget {
           totalSum += recentTransactions[i].ammount;
         }
       }
-
-      print(totalSum);
-      print(DateFormat.E().format(weekDay));
 
       return {
         'day': DateFormat.E().format(weekDay).substring(0, 1),
@@ -40,7 +39,7 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(groupedTransactionValues);
+    print('build() Chart');
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(20),
