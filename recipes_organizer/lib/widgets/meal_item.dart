@@ -10,7 +10,6 @@ class MealItem extends StatelessWidget {
   final Affordability affordability;
   final String id;
   final Color categoryColor;
-  final Function removeHandler;
 
   const MealItem(
       {Key key,
@@ -20,8 +19,7 @@ class MealItem extends StatelessWidget {
       @required this.complexity,
       @required this.affordability,
       @required this.id,
-      @required this.categoryColor,
-      @required this.removeHandler})
+      @required this.categoryColor})
       : super(key: key);
 
   String get complexityText {
@@ -65,7 +63,7 @@ class MealItem extends StatelessWidget {
       },
     ).then((result) {
       if (result != null) {
-        removeHandler(result);
+        //   removeHandler(result);
       }
     });
   }
